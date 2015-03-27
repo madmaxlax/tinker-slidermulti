@@ -93,13 +93,14 @@ $( "#slider" ).slider({
 	}
 });
 $("#btn-add").click(function(){
-	var curVals = $( "#slider" ).slider("values");
-	var newVals = curVals.push(1);
-	$( "#slider" ).slider("values",[10,90]);
+	//var curVals = $( "#slider" ).slider("values");
+	//var newVals = curVals.push(1);
+	//$( "#slider" ).slider("values",[10,90]);
+	$( "#slider" ).slider("addHandle");
 });
 
 $("#btn-remove").click(function(){
-	$( "#slider" ).slider("values",($( "#slider" ).slider("values")).pop());
+	$( "#slider" ).slider("removeHandle");
 });
 
 

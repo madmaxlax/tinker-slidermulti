@@ -1428,17 +1428,17 @@ var slider = $.widget( "ui.slider", $.ui.mouse, {
 		var vals,
 			newValues,
 			i;
-
+		//if both arguments were sent, store the new valuse
 		if ( arguments.length > 1 ) {
 			this.options.values[ index ] = this._trimAlignValue( newValue );
 			this._refreshValue();
 			this._change( null, index );
 			return;
 		}
-
+		//if only one argument is sent, store it as the new array for values
 		if ( arguments.length ) {
 			if ( $.isArray( arguments[ 0 ] ) ) {
-				vals = this.options.values;
+				vals = this.options.values; //shortcut 
 				newValues = arguments[ 0 ];
 				for ( i = 0; i < vals.length; i += 1 ) {
 					vals[ i ] = this._trimAlignValue( newValues[ i ] );
@@ -1452,9 +1452,21 @@ var slider = $.widget( "ui.slider", $.ui.mouse, {
 					return this.value();
 				}
 			}
-		} else {
+		} else { //just return the array of values
 			return this._values();
 		}
+	},
+	
+	//new function to allow creation of handles
+	addHandle: function () {
+		this.options.values.push(this._trimAlignValue(( this._valueMax() - this._valueMin() ) /2));
+		this._refresh();
+	},
+	
+	//new function to allow creation of handles
+	removeHandle: function () {
+		this.options.values.pop();
+		this._refresh();
 	},
 
 	_setOption: function( key, value ) {
