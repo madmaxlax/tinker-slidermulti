@@ -1079,6 +1079,8 @@ var slider = $.widget( "ui.slider", $.ui.mouse, {
 	// number of pages in a slider
 	// (how many times can you page up/down to go through the whole range)
 	numPages: 5,
+	//maximum number of sliders allowed
+	maxNumHandles: 6 ,
 
 	_create: function() {
 		this._keySliding = false;
@@ -1144,7 +1146,9 @@ var slider = $.widget( "ui.slider", $.ui.mouse, {
 			if ( options.range === true ) {
 				if ( !options.values ) {
 					options.values = [ this._valueMin(), this._valueMin() ];
-				} else if ( options.values.length && options.values.length > 5 ) {
+				}
+				//added allowance for more sliders now 
+				else if ( options.values.length && options.values.length > this.maxNumHandles) {
 					options.values = [ options.values[0], options.values[0] ];
 				} else if ( $.isArray( options.values ) ) {
 					options.values = options.values.slice(0);

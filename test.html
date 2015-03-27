@@ -71,6 +71,10 @@
 		<th>Values</th>
 		<td id="valuesoutput"></td>
 	</tr>
+	<tr>
+		<td><button class="btn" id="btn-add">add</button></td>
+		<td><button class="btn" id="btn-remove">remove</button></td>
+	</tr>
 </table>
 
 
@@ -79,17 +83,24 @@
 <script>
 
 
-
+var sliderVar;
 
 $( "#slider" ).slider({
 	range: true,
-	animate:true,
-	values: [10,20],
+	values: [10,20, 30, 80],
 	slide: function(event, slider) {
 		$("#valuesoutput").text(slider.values.toString());
 	}
 });
+$("#btn-add").click(function(){
+	var curVals = $( "#slider" ).slider("values");
+	var newVals = curVals.push(1);
+	$( "#slider" ).slider("values",[10,90]);
+});
 
+$("#btn-remove").click(function(){
+	$( "#slider" ).slider("values",($( "#slider" ).slider("values")).pop());
+});
 
 
 
