@@ -24,7 +24,7 @@
 					animate: true,
 					values: [10, 20, 30, 80],
 					slide: function(event, slider) {
-						$("#valuesoutput").text($("#slider").slider("values"));
+						//$("#valuesoutput").text($("#slider").slider("values"));
 					},
 					create:function(){//hide loader
 						$(this).find(".slider-loader").remove();
