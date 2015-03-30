@@ -30,7 +30,7 @@
 	background-position: 0 0;
 }
 
-.ui-slider-handle::focus {
+.ui-slider-handle{
 	outline: none;
 }
 /* support: IE8 - See #6727 */
@@ -38,7 +38,10 @@
 .ui-slider.ui-state-disabled .ui-slider-range {
 	filter: inherit;
 }
-
+.slider-loader
+{
+	height: (@ui-slider-handle-size * (2/3));
+}
 .ui-slider-horizontal {
 	height: (@ui-slider-handle-size * (2/3));
 }
