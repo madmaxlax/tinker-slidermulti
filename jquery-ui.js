@@ -1477,13 +1477,23 @@
 				return this._values();
 			}
 		},
-
+		//make the referesh function available publicly
+		refresh: function(){
+			this._refresh();
+		},
+		
 		//new function to allow creation of handles
-		addHandle: function() {
+		addHandle: function(valForNewHandle) {
 			//only continue if allowed to keep adding handles
-			if(this.options.values.length+1 < this.maxNumHandles)
-			{
-				this.options.values.push(this._trimAlignValue((this._valueMax() - this._valueMin()) / 2));
+			if (this.options.values.length  < this.maxNumHandles) {
+				//check if the passed value was within the range
+				if (this._valueMax() > valForNewHandle && valForNewHandle > this._valueMin()) { 
+					//add the new handle at the specified value. 
+					this.options.values.push(this._trimAlignValue(valForNewHandle));
+				} else {
+					//just add the new handle in the middle
+					this.options.values.push(this._trimAlignValue((this._valueMax() - this._valueMin()) / 2));
+				}
 				this._refresh();
 			}
 		},
