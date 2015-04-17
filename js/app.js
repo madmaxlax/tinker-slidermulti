@@ -2,57 +2,65 @@
 (function() {
 	var app = angular.module('slider', []);
 	app.controller('SliderController', function() {
+		//bool for checking if the slider is finished loading 
 		this.sliderLoaded = false;
-		this.vals = [];
-		this.updateVals = function(){
-			if(this.sliderLoaded)
-			{
-				this.vals = $("#slider").slider("values");
+		//the array of values of the slider
+		this.sliderVals = [];
+		//a Jquery'd handle for the slider element in the 
+		this.sliderEm = null;
+		this.updateVals = function() {
+			if (this.sliderLoaded) {
+				this.sliderVals = this.sliderEm.slider("values");
+				//$scope.$apply();
+			} else {
+				this.sliderVals = "loading...";
 			}
-			else
-			{
-				this.vals = "loading...";
-			}
+		};
+		this.addSlider = function() {
+			$("#slider").slider("addHandle", 50);
+			this.updateVals();
+		};
+
+		this.removeSlider = function() {
+			$("#slider").slider("removeHandle");
+			this.updateVals();
 		};
 	});
 	app.directive('wtwSlider', function() {
 		return {
-			restrict: 'A',//only seems to work as an attribute
+			restrict: 'A', //only seems to work as an attribute
 			link: function(scope, element, attrs) {
 				//apply the jquery UI Slider widget to the passed info
-				var vals = [];
-				vals = JSON.parse(attrs.wtwSlider);
-				if (vals.length === 0)
-				{
+				var initialvals = [];
+				try {//try to parse the value and see if its an okay array
+					initialvals = JSON.parse(attrs.wtwSlider);
+				} catch (err) {}
+				if (initialvals.length === 0) {
 					//default val
-					vals= [10, 20, 30, 80];
+					vals = [10, 20, 30, 80];
 				}
 				$(element).slider({
 					animate: true,
 					values: vals,
 					slide: function(event, slider) {
-						//scope.tempslider.vals = $(this).slider("values");
+						scope.tempslider.sliderVals = $(this).slider("values");
 						//scope.tempslider.updateVals();
-						//scope.$apply();
+						scope.$apply();
 					},
-					create:function(){//hide loader
+					create: function() { //hide loader
 						$(this).find(".slider-loader").remove();
-						scope.tempslider.sliderLoaded = true;	
-						scope.tempslider.vals = $(this).slider("values");
+						scope.tempslider.sliderLoaded = true;
+						scope.tempslider.sliderVals = $(this).slider("values");
 					}
 				});
+
+				scope.tempslider.sliderEm = $(element);
 			}
 		};
 	});
 })(); //end javascript wrapping 
 
-
-//$("#slider")
-$("#btn-add").click(function() {
-	$("#slider").slider("addHandle", 70);
-	$("#slider").slider("refresh");
-});
-
+/* 
 $("#btn-remove").click(function() {
 	$("#slider").slider("removeHandle");
-});
+}); */
