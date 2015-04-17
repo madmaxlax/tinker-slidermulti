@@ -1,16 +1,25 @@
 //angular
+
+var removeLoaders = function()
+{
+	$(this).parent().find(".slider-loader").remove();
+};
+
 (function() {
 	var app = angular.module('slider', ['ui.slider']);
-	app.factory('removeLoaders', function() {
-		$(this).find(".slider-loader").remove();
+	app.controller("sliderController", function(){
+		this.vals = [10,80,90];
+		this.addHandle = function(newhandleval){
+			this.vals.push(newhandleval);
+		};
+		
 	});
+/* 	app.factory('removeLoaders', function() {
+		$(this).find(".slider-loader").remove();
+	}); */
 
 })(); //end javascript wrapping 
 
-function removeLoaders()
-{
-	$(this).parent().find(".slider-loader").remove();
-}
 
 var sliderVar;
 

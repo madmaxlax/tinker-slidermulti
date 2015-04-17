@@ -9,8 +9,7 @@
 			uiSliderConfig = uiSliderConfig || {};
 			return {
 				require: 'ngModel',
-				compile: function() {
-					return function(scope, elm, attrs, ngModel) {
+				link: function(scope, elm, attrs, ngModel) {
 
 						function parseNumber(n, decimals) {
 							return (decimals) ? parseFloat(n) : parseInt(n);
@@ -30,10 +29,11 @@
 						var init = function() {
 							// When ngModel is assigned an array of values then range is expected to be true.
 							// Warn user and change range to true else an error occurs when trying to drag handle
-							if (angular.isArray(ngModel.$viewValue) && options.range !== true) {
+							//max: dont want this happening unless explicitly added
+/* 							if (angular.isArray(ngModel.$viewValue) && options.range !== true) {
 								console.warn('Change your range option of ui-slider. When assigning ngModel an array of values then the range option should be set to true.');
 								options.range = true;
-							}
+							} */
 
 							// Ensure the convenience properties are passed as options if they're defined
 							// This avoids init ordering issues where the slider's initial state (eg handle
@@ -47,7 +47,13 @@
 							//manually add create option
 							options.create = removeLoaders;
 
+							//Calls the actual JQuery UI Slider widget
+							//setup the slider and all, with intiated options
 							elm.slider(options);
+							
+							//update the model for the first time 
+							ngModel.$setViewValue(elm.slider("values") || elm.slider("values"));
+							
 							init = angular.noop;
 						};
 
@@ -83,15 +89,24 @@
 							ngModel.$setViewValue(ui.values || ui.value);
 							scope.$apply();
 						});
-
-						// Update slider from model value
+						
+						// Update slider from model value, when it is changed (but only when changed by user?)
 						ngModel.$render = function() {
 							init();
-							var method = options.range === true ? 'values' : 'value';
-
-							if (!options.range && isNaN(ngModel.$viewValue) && !(ngModel.$viewValue instanceof Array)) {
+							//check if it handles arrays of values or not
+							var method = (options.range === true || options.multi === true)? 'values' : 'value';
+							//get the current number of handles/sliders
+							var prevcount = angular.isArray(elm.slider('values'))? elm.slider('values').length:1;
+							var newcount = angular.isArray(ngModel.$modelValue)?ngModel.$modelValue.length:1;
+							if (newcount > prevcount){
+								elm.slider('addHandle',70);
+								ngModel.$setViewValue(elm.slider('values'));
+							}
+							
+							//check for bad values
+							if (!(options.range === true || options.multi === true) && isNaN(ngModel.$viewValue) && !(ngModel.$viewValue instanceof Array)) {
 								ngModel.$viewValue = 0;
-							} else if (options.range && !angular.isDefined(ngModel.$viewValue)) {
+							} else if ((options.range || options.multi) && !angular.isDefined(ngModel.$viewValue)) {
 								ngModel.$viewValue = [0, 0];
 							}
 
@@ -134,8 +149,8 @@
 							elm.slider('destroy');
 						}
 						elm.bind('$destroy', destroy);
-					};
-				}
+					},
+				
 			};
 		}
 	]);
