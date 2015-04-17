@@ -19,10 +19,11 @@
 			<div id="slider" wtw-Slider="[10, 20, 30, 80]">
 				<img src="external/Floatingrays.gif" alt="loading..." height="1ex" class="slider-loader">
 			</div>
+			<div class="row" ng-repeat="article in tempslider.articles">{{article.name}}, {{tempslider.sliderVals[article.id]}}</div>
 			<table>
 				<tr>
 					<th>Values</th>
-					<td id="valuesoutput" height="1ex">{{tempslider.vals}}</td>
+					<td id="valuesoutput" height="1ex">{{tempslider.sliderVals}}</td>
 				</tr>
 				<tr>
 					<td>

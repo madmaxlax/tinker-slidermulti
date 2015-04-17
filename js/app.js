@@ -6,6 +6,9 @@
 		this.sliderLoaded = false;
 		//the array of values of the slider
 		this.sliderVals = [];
+		
+		//array of clothing
+		this.articles = [{name:"jacket",id:0},{name:"shirt",id:1},{name:"tank",id:2}];
 		//a Jquery'd handle for the slider element in the 
 		this.sliderEm = null;
 		this.updateVals = function() {
@@ -41,7 +44,7 @@
 				}
 				$(element).slider({
 					animate: true,
-					values: vals,
+					values: initialvals,
 					slide: function(event, slider) {
 						scope.tempslider.sliderVals = $(this).slider("values");
 						//scope.tempslider.updateVals();
